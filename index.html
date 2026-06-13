@@ -50,6 +50,39 @@
 			opacity: 0;
 			transform: translateY(30px);
 			animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+			transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+		}
+
+		.btn-next {
+			margin-top: 2.5rem;
+			padding: 0.8rem 2.2rem;
+			font-size: 1.05rem;
+			font-weight: 600;
+			color: #ffffff;
+			background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+			border: none;
+			border-radius: 9999px;
+			cursor: pointer;
+			box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+			transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+			outline: none;
+			
+			/* 등장 애니메이션 */
+			opacity: 0;
+			transform: translateY(20px);
+			animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+			animation-delay: 0.3s;
+		}
+
+		.btn-next:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 25px rgba(59, 130, 246, 0.6);
+			background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+		}
+
+		.btn-next:active {
+			transform: translateY(1px);
+			box-shadow: 0 3px 10px rgba(59, 130, 246, 0.4);
 		}
 
 		/* 반응형: 모바일 화면에서 폰트 크기 조정 */
@@ -71,8 +104,49 @@
 
 <body>
 	<div class="container">
-		<h1>오늘도 힘내세요!</h1>
+		<h1 id="sentence-text">오늘도 힘내세요!</h1>
+		<button id="next-btn" class="btn-next">다음 문장 보기</button>
 	</div>
+
+	<script>
+		const sentences = [
+			"오늘도 힘내세요!",
+			"당신은 생각보다 훨씬 더 강하고 멋진 사람이에요.",
+			"오늘의 작은 시작이 내일의 기적이 될 거예요.",
+			"스스로를 믿는 순간, 불가능은 사라집니다.",
+			"가장 늦었다고 느낄 때가 가장 빠른 시작의 순간입니다.",
+			"언제나 당신의 새로운 도전을 응원합니다.",
+			"오늘 하루도 정말 애쓰셨고 고생 많으셨어요.",
+			"잠시 쉬어가도 괜찮아요, 결국 목적지에 닿을 테니까요."
+		];
+		let currentIndex = 0;
+		const textEl = document.getElementById('sentence-text');
+		const buttonEl = document.getElementById('next-btn');
+
+		buttonEl.addEventListener('click', () => {
+			// 페이드 아웃 효과
+			textEl.style.opacity = '0';
+			textEl.style.transform = 'translateY(-20px)';
+
+			setTimeout(() => {
+				// 다음 문장 설정 (순환)
+				currentIndex = (currentIndex + 1) % sentences.length;
+				textEl.textContent = sentences[currentIndex];
+				
+				// 트랜지션 없이 아래쪽 시작 위치로 이동
+				textEl.style.transition = 'none';
+				textEl.style.transform = 'translateY(20px)';
+				
+				// Reflow 발생시켜 브라우저가 위치 재설정을 인식하도록 함
+				textEl.offsetHeight;
+
+				// 트랜지션 복원 및 페이드 인 효과
+				textEl.style.transition = 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+				textEl.style.opacity = '1';
+				textEl.style.transform = 'translateY(0)';
+			}, 500);
+		});
+	</script>
 </body>
 
 </html>
